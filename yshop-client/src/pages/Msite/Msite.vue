@@ -256,7 +256,6 @@
       .shop_container
         margin-bottom 50px
         .shop_list
-          padding:0
           .shop_li
             bottom-border-1px(#f1f1f1)
             width 100%
