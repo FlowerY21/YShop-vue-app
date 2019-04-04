@@ -1,16 +1,39 @@
 <template>
-  <div class="star star-24">
-    <span class="star-item on" v-for="star in 5"></span>
-    <span class="star-item on"></span>
-    <span class="star-item on"></span>
-    <span class="star-item half"></span>
-    <span class="star-item off"></span>
+  <div class="star" :class="`star-${size}`">
+    <span class="star-item" v-for="(starClass,index) in starClasses" :key="index" :class="starClass"></span>
   </div>
 </template>
 
 <script>
-  export default({
 
+  const CLASS_ON = 'on'
+  const CLASS_HALF = 'half'
+  const CLASS_OFF = 'off'
+
+  export default({
+    props:{
+      size:Number,
+      score:Number
+    },
+    computed:{
+      starClasses(){
+        const {score} = this;
+        const classArr = [];
+        const classOn = Math.floor(score);
+        const classHalf = score * 10 - classOn * 10;
+        console.log(classHalf)
+        for(let i =0; i<classOn;i++ ){
+          classArr.push(CLASS_ON)
+        }
+        if(classHalf >= 5){
+          classArr.push(CLASS_HALF)
+        }
+        if(classArr.length <5){
+          classArr.push(CLASS_OFF)
+        }
+        return classArr;
+      }
+    }
   })
 </script>
 

@@ -12,9 +12,11 @@
     components:{
       FooterGuide
     },
-
+    mounted(){
+      this.$store.dispatch('getAddress');
+    },
   })
-</script> 
+</script>
 
 <style lang="stylus" rel="stylesheet/stylus">
 
