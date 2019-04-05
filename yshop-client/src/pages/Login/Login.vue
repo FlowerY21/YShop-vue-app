@@ -7,7 +7,7 @@
           <a href="javascript:;" :class="{on:!loginClass}" @click="loginWay()">密码登录</a></div>
       </div>
       <div class="login_content">
-        <form @submit.prevent="login()">
+        <form>
           <div :class="{on:loginClass}">
             <section class="login_message"><input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
               <button :disabled="!rightPhone" class="get_verification" :class="{right_phone:rightPhone}" @click="getPhoneCode()">
@@ -31,10 +31,10 @@
                   <span class="switch_text">{{pwdShow ? '...':'abc'}}</span></div>
               </section>
               <section class="login_message"><input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha"></section>
+                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha()" ref="captcha"></section>
             </section>
           </div>
-          <button class="login_submit">登录</button>
+          <button class="login_submit"@click="login()">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -48,6 +48,7 @@
 
 <script>
 import AlertTip from '../../components/AlertTip/AlertTip'
+import {reqSendCode , reqLoginSms , reqLoginPwd} from '../../api'
 export default {
   data(){
     return{
@@ -64,31 +65,45 @@ export default {
     }
   },
   methods:{
+    // 登录方式
     loginWay(){
       this.loginClass = !this.loginClass;
     },
-    getPhoneCode(){
+    // 获取短信验证码
+    async getPhoneCode(){
       // 倒计时
       if(this.countDown == 0){
         this.countDown = 60;
-        const intervalId = setInterval(()=>{
+        this.intervalId = setInterval(()=>{
           this.countDown--;
           if(this.countDown <= 0){
-            clearInterval(intervalId)
+            clearInterval(this.intervalId)
           }
-        },1000)
-        // 发送验证码
+        },1000);
 
+        // 发送验证码
+        const result = await reqSendCode(this.phone);
+        if(result.code == 1){
+          this.showAlert(result.msg)  //错误信息提示
+          if(this.countDown){ //  清除定时器
+            this.countDown = 0;
+            clearInterval(this.intervalId);
+          }
+        }
       }
     },
+    // 密码切换按钮
     switchButton(){
       this.pwdShow = !this.pwdShow;
     },
+    // 显示弹窗
     showAlert(text){
       this.alertText = text;
       this.alertShow = true;
     },
-    login(){
+    // 登录
+    async login(){
+      let result;
       if(this.loginClass){  //  短信登录
         const {rightPhone , phone , code} = this;
         if(!rightPhone){
@@ -96,6 +111,7 @@ export default {
         }else if(!/^\d{6}$/.test(code)){
           this.showAlert('请输入验证码')
         }
+        result = await reqLoginSms(phone,code);
       }else{  //  密码登录
         const {name , pwd , captcha} = this;
         if(!this.name){
@@ -105,11 +121,29 @@ export default {
         }else if(!this.captcha){
           this.showAlert('请输入验证码')
         }
+        result = await reqLoginPwd({name , pwd , captcha});
       }
+
+      if(result.code == 0){
+        // 登录成功跳转
+        const user = result.data;
+        this.$router.replace('/profile');
+        // 存储用户信息
+        this.$store.dispatch('recordUser',user)
+      }else{
+        this.getCaptcha();  //获取图形验证码
+        this.showAlert(result.msg)
+      }
+
     },
+    // 关闭弹窗
     closeTip(){
       this.alertShow = false;
       this.alertText = '';
+    },
+    // 获取图形验证码
+    getCaptcha(){
+      this.$refs.captcha.src = "http://localhost:4000/captcha?time="+ Date.now();
     }
   },
   computed:{

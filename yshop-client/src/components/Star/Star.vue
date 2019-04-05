@@ -21,7 +21,6 @@
         const classArr = [];
         const classOn = Math.floor(score);
         const classHalf = score * 10 - classOn * 10;
-        console.log(classHalf)
         for(let i =0; i<classOn;i++ ){
           classArr.push(CLASS_ON)
         }
