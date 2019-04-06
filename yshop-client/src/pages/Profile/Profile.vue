@@ -89,7 +89,7 @@
           </div>
         </a>
       </section>
-      <section class="profile_my_order border-1px" v-if="userInfo._id">
+      <section class="profile_my_order border-1px">
         <mt-button type="danger" size="large" @click.native = "logout()">退出</mt-button>
       </section>
     </section>

@@ -126,12 +126,13 @@ export default {
 
       if(result.code == 0){
         // 登录成功跳转
-        const user = result.data;
+        alert(1)
+        const userInfo = result.data;
         this.$router.replace('/profile');
         // 存储用户信息
-        this.$store.dispatch('recordUser',user)
+        this.$store.dispatch('recordUser',userInfo)
       }else{
-        alert(1)
+        alert(2)
         this.getCaptcha();  //获取图形验证码
         this.showAlert(result.msg)
       }

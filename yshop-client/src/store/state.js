@@ -4,5 +4,8 @@
     address:{},   //地址信息
     categorys:[],  //食品分类
     shops:[],   //商品列表
-    userInfo:{} //用户信息
+    userInfo:{}, //用户信息
+    goods:[],   //店铺商品
+    ratings:[], //店铺评价
+    info:{},  //店铺信息
   })

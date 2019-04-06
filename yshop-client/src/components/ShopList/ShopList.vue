@@ -1,7 +1,7 @@
 <template>
   <div class="shop_container">
     <ul class="shop_list" v-if="shops.length">
-      <li class="shop_li border-1px" v-for="(shop,index) in shops">
+      <router-link tag="li" class="shop_li border-1px" v-for="(shop,index) in shops" to="/shop">
         <a>
           <div class="shop_left">
             <img class="shop_img" :src="baseImgUrl+shop.image_path">
@@ -36,8 +36,7 @@
             </section>
           </div>
         </a>
-      </li>
-      <!--省略其他店铺展示-->
+      </router-link>
     </ul>
     <div  v-else>
       <img src="./images/shop_back.svg" alt="" v-for="img in 8">
@@ -61,7 +60,7 @@ export default {
   },
   computed:{
     ...mapState(['shops'])
-  }
+  },
 }
 </script>
 
