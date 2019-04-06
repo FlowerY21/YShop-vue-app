@@ -89,8 +89,8 @@
           </div>
         </a>
       </section>
-      <section class="profile_my_order border-1px">
-        <mt-button type="danger"  style="width: 80%;margin: auto;">退出</mt-button>
+      <section class="profile_my_order border-1px" v-if="userInfo._id">
+        <mt-button type="danger" size="large" @click.native = "logout()">退出</mt-button>
       </section>
     </section>
   </div>
@@ -100,7 +100,7 @@
 <script>
   import HeaderTop from '../../components/HeaderTop/HeaderTop'
   import {mapState} from 'vuex'
-
+  import {MessageBox ,Toast} from 'mint-ui'
 
   export default ({
     components:{
@@ -108,6 +108,14 @@
     },
     computed:{
       ...mapState(['userInfo'])
+    },
+    methods:{
+      logout(){
+        MessageBox.confirm('确定退出应用?').then(action => {
+          this.$store.dispatch('logout');
+          Toast('已退出');
+        });
+      }
     }
   })
 

@@ -131,6 +131,7 @@ export default {
         // 存储用户信息
         this.$store.dispatch('recordUser',user)
       }else{
+        alert(1)
         this.getCaptcha();  //获取图形验证码
         this.showAlert(result.msg)
       }

@@ -17,7 +17,16 @@
   ],
   "plugins": [
     "transform-vue-jsx",
-    "transform-runtime"
+    "transform-runtime",
+    [
+      "component",
+      [
+        {
+          "libraryName": "mint-ui",
+          "style": true
+        }
+      ]
+    ]
   ],
   "env": {
     "test": {
@@ -28,17 +37,7 @@
       "plugins": [
         "transform-vue-jsx",
         "transform-es2015-modules-commonjs",
-        "dynamic-import-node",
-        "transform-runtime",
-        [
-          "component",
-          [
-            {
-              "libraryName": "mint-ui",
-              "style": true
-            }
-          ]
-        ]
+        "dynamic-import-node"
       ]
     }
   }
